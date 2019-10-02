@@ -37,8 +37,29 @@ public class CalendarServiceImp implements CalendarService {
                             localDate.getDayOfWeek().equals(DayOfWeek.SUNDAY) );
         }
 
-        System.out.println(values);
-
         return values;
     }
+
+    @Override
+    public LocalDate getCurrentDate(Map<String, String> allParams) {
+
+        LocalDate currentLocalDate = null;
+
+        Integer dateYear = Integer.parseInt(allParams.getOrDefault("year","2000"));
+        Integer dateMonth = Integer.parseInt(allParams.getOrDefault("month","1"));
+        Integer dateDay = Integer.parseInt(allParams.getOrDefault("day","1"));
+
+        if(allParams.containsKey("next"))
+            currentLocalDate = LocalDate.of(dateYear,dateMonth,dateDay).plusMonths(1);
+        else if(allParams.containsKey("previous"))
+            currentLocalDate = LocalDate.of(dateYear,dateMonth,dateDay).minusMonths(1);
+        else
+            currentLocalDate = LocalDate.of(dateYear,dateMonth,dateDay);
+
+        return currentLocalDate;
+
+
+    }
+
+
 }

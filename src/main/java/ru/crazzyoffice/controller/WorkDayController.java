@@ -39,55 +39,38 @@ public class WorkDayController {
     }
 
     @PostMapping("/list-search")
-    public String history(@RequestParam(value = "step",required = false) String step,
-                          @RequestParam(value = "edit",required = false) String edit,
-                          @RequestParam(value = "year",required = false) Integer dateYear,
-                          @RequestParam(value = "month",required = false) Integer dateMonth,
-                          @RequestParam(value = "day",required = false) Integer dateDay,
-                          @RequestParam(value = "event",required = false) String event,
-                          @RequestParam(value = "person",required = false) Integer person,Model theModel){
+    public String navigationMOnths(@RequestParam Map<String,String> allParams, Model theModel){
 
+        LocalDate currentDate = calendarService.getCurrentDate(allParams);
+        fillModel(theModel, currentDate);
 
-        ////Genegate currentLocalDate for proccess
-        LocalDate currentLocalDate = null;
+        if(allParams.containsKey("edit"))
+            return "edit";
+        else
+            return "list";
 
-            //For navigation
-            if(step!=null){
-                if(step.equals("next")) currentLocalDate = LocalDate.of(dateYear,dateMonth,1).plusMonths(1);
-                else if(step.equals("previous")) currentLocalDate = LocalDate.of(dateYear,dateMonth,1).minusMonths(1);
-            }
-            //For edit or delete event for certain day
-            else if(dateDay!=null){
-                currentLocalDate = LocalDate.of(dateYear,dateMonth,dateDay);
-            }
-            //when we need days from calendarservice
-            else {
-                currentLocalDate = LocalDate.of(dateYear,dateMonth,1);
-            }
+    }
 
+    @PostMapping("/list-edit")
+    public String edit(@RequestParam Map<String,String> allParams, Model theModel){
 
+        Integer person = Integer.parseInt(allParams.getOrDefault("person","0"));
+        LocalDate currentLocalDate = calendarService.getCurrentDate(allParams);
 
+        if(allParams.containsKey("save"))
+            workDayService.createWorkDayEvent(currentLocalDate.toString(), allParams.get("event"), person);
+        if(allParams.containsKey("del"))
+            workDayService.deleteWorkDayEvent(currentLocalDate.toString(),person);
 
-        ///CRUD Workday event in edit Mode
-        if(edit!=null && person != null && dateDay != null) {
-            String date = currentLocalDate.toString();
-            if (edit.equals("edit")) {
-                workDayService.createWorkDayEvent(date, event, person);
-            }
-            if (edit.equals("del") ) {
-                workDayService.deleteWorkDayEvent(date, person);
-            }
-        }
-
-        ///Fill model with date
         fillModel(theModel, currentLocalDate);
 
+        if(allParams.containsValue("exit"))
+            return "list";
+        else
+            return "edit";
 
-        if(edit!=null){
-             if(edit.equals("edit") || edit.equals("del")) return "edit";
-        }
-        return "list";
     }
+
 
     private void fillModel(Model theModel, LocalDate currentLocalDate) {
         String date = currentLocalDate.toString();
