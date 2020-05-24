@@ -6,14 +6,12 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
-import ru.crazzyoffice.entity.Person;
+import ru.crazzyoffice.entity.JobType;
 
 @Repository
-public interface  PersonRepository extends JpaRepository<Person,Integer> {
-
-
+public interface   JobRepository  extends JpaRepository<JobType,Integer> {
     @Transactional
     @Modifying
-    @Query("DELETE FROM Person r WHERE r.id=:id")
+    @Query("DELETE FROM JobType r WHERE r.id=:id")
     int delete(@Param("id") int id);
 }

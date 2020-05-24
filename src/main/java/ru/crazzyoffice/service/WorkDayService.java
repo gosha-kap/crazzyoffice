@@ -1,25 +1,22 @@
 package ru.crazzyoffice.service;
 
+import com.pengrad.telegrambot.TelegramBot;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 import ru.crazzyoffice.entity.WorkDay;
+import ru.crazzyoffice.repository.WorkDayRepository;
 
-import java.util.List;
-import java.util.Optional;
+import java.net.URL;
+import java.time.LocalDate;
 
-public interface WorkDayService {
+@Service
+public class WorkDayService {
 
+    @Autowired
+    private WorkDayRepository repository;
 
-    public List<WorkDay> getWorkDaysForMonth(String date);
+    public WorkDay getTodayWorkday() throws Exception{
+        return null;
+    }
 
-    public WorkDay getWorkDaysForDay(String date);
-
-    public void saveWorkDay(WorkDay day);
-
-
-    public WorkDay getWorkDay(int theId);
-
-    public void deleteWorkDay(int theId);
-
-    public boolean createWorkDayEvent(String date,String event, int person);
-
-    public boolean deleteWorkDayEvent(String date,int person);
 }
