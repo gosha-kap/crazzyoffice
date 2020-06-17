@@ -28,4 +28,8 @@ public interface WorkDayRepository extends JpaRepository<WorkDay,Integer> {
     @Modifying
     @Query("DELETE FROM WorkDay r WHERE r.id=:id")
     int delete(@Param("id") int id);
+
+    @Query(value = "SELECT * from workDay WHERE date >=?1 AND  date<=?2",
+            nativeQuery = true)
+    List<WorkDay> getWeekDays(LocalDate monday, LocalDate sunday);
 }

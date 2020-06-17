@@ -89,27 +89,27 @@ public class JPAConfig {
         return driverManagerDataSource;
     }
 
-    @Value("classpath:init.sql")
+   /* @Value("classpath:init.sql")
     private Resource schemaScript;
 
     @Value("classpath:create-db.sql")
-    private Resource dataScript;
+    private Resource dataScript;*/
 
     @Bean
     public DataSourceInitializer dataSourceInitializer(final DataSource dataSource) {
         final DataSourceInitializer initializer = new DataSourceInitializer();
         initializer.setDataSource(dataSource);
-        initializer.setDatabasePopulator(databasePopulator());
+     //   initializer.setDatabasePopulator(databasePopulator());
         return initializer;
     }
 
-    private DatabasePopulator databasePopulator() {
+ /*   private DatabasePopulator databasePopulator() {
         final ResourceDatabasePopulator populator = new ResourceDatabasePopulator();
         populator.addScript(schemaScript);
         populator.setSqlScriptEncoding("utf-8");
         populator.addScript(dataScript);
         return populator;
-    }
+    }*/
 
 /*    @Bean
     public DataSource securityDataSource(){
