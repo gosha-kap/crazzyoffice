@@ -7,12 +7,14 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 import ru.crazzyoffice.entity.WorkDay;
+import ru.crazzyoffice.entity.model.Event;
 import ru.crazzyoffice.error.IllegalRequestDataException;
 import ru.crazzyoffice.error.NotFoundException;
 import ru.crazzyoffice.repository.WorkDayRepository;
 
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;

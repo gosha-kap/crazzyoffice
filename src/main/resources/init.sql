@@ -1,23 +1,12 @@
 DROP TABLE IF EXISTS person_workday_relashion;
+DROP table if exists jobentity;
 DROP TABLE IF EXISTS workDay;
 DROP TABLE IF EXISTS person;
-DROP TABLE  if exists jobtype;
+DROP TABLE if EXISTS jobtype;
 Drop Table if exists telegramuser;
-drop table if exists authorities;
-drop table if exists users;
 
 
-create table users(
-	username varchar(50) not null primary key,
-	password varchar(100) not null,
-	enabled boolean not null
-);
-create table authorities (
-	username varchar(50) not null,
-	authority varchar(50) not null,
-	constraint fk_authorities_users foreign key(username) references users(username)
-);
-create unique index ix_auth_username on authorities (username,authority);
+
 
 
 Create TABLE telegramuser(
@@ -40,7 +29,18 @@ CREATE TABLE workday (
 
 CREATE TABLE jobtype (
 id serial primary key ,
-description varchar  NOT NULL
+description varchar  NOT NULL,
+backgroundcolor varchar  DEFAULT 'blue',
+textcolor varchar  DEFAULT 'white',
+icon varchar DEFAULT NULL
+);
+
+CREATE TABLE jobentity(
+    id serial PRIMARY KEY ,
+    date DATE NOT NULL  DEFAULT CURRENT_DATE,
+	job_person int REFERENCES person (id) ON UPDATE CASCADE ON DELETE CASCADE,
+    job_event int REFERENCES jobtype (id) ON UPDATE Cascade  ON DELETE CASCADE
+
 );
 
 
@@ -50,3 +50,4 @@ CREATE TABLE person_workday_relashion (
   person_job int REFERENCES jobtype (id) ON UPDATE Cascade  ON DELETE CASCADE ,
   CONSTRAINT person_workday PRIMARY KEY ( workday_id, person_id, person_job)
 );
+

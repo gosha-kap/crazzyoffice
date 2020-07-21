@@ -12,9 +12,11 @@ import org.telegram.telegrambots.meta.api.objects.CallbackQuery;
 import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import ru.crazzyoffice.ConvertToMessage;
+import ru.crazzyoffice.entity.JobEntity;
 import ru.crazzyoffice.entity.TelegramUser;
 import ru.crazzyoffice.entity.WorkDay;
 import ru.crazzyoffice.error.NotFoundException;
+import ru.crazzyoffice.repository.EventJobRepo;
 import ru.crazzyoffice.repository.TelegramRepository;
 import ru.crazzyoffice.repository.WorkDayRepository;
 import ru.crazzyoffice.service.MainMenuService;
@@ -48,6 +50,9 @@ public class TelegramFacade {
     @Autowired
     private WorkDayRepository workDayRepository;
 
+    @Autowired
+    private EventJobRepo eventJobRepo;
+
 
 
     public BotApiMethod<?> handleUpdate(Update update) {
@@ -64,7 +69,7 @@ public class TelegramFacade {
                 switch (inputMsg){
                     case "Шлагбаум Пологая":
                         try {
-                            arduinoSendRequest.doGet();
+                            arduinoSendRequest.doGet(POSITION.Pologaya);
                         } catch (IOException e) {
                             e.printStackTrace();
                         } catch (InterruptedException e) {
@@ -72,11 +77,27 @@ public class TelegramFacade {
                         }
                         outMsg = "Пожалуйста, проезжайте";
                         break;
+                    case "Ворота Гараж":
+                        try {
+                            arduinoSendRequest.doGet(POSITION.Garage);
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
+                        outMsg = "Пожалуйста, проезжайте";
+                        break;
+
                     case "Рассписание на неделю":
                         LocalDate monday = LocalDate.now().with(DayOfWeek.MONDAY);
                         LocalDate sunday = LocalDate.now().with(DayOfWeek.SUNDAY);
-                        List<WorkDay> weekWorkDays = workDayRepository.getWeekDays(monday,sunday);
-                        outMsg = ConvertToMessage.convertWorkDays(weekWorkDays);
+
+                        /*List<WorkDay> weekWorkDays = workDayRepository.getWeekDays(monday,sunday);
+                        outMsg = ConvertToMessage.convertWorkDays(weekWorkDays);*/
+
+                        List<JobEntity> weekJobs = eventJobRepo.getWeekEvents(monday,sunday);
+                        outMsg = ConvertToMessage.convertEvents(weekJobs);
+
                         break;
                     default:
                         outMsg = "Воспользуйтесь главным меню";

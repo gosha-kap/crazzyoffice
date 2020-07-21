@@ -25,5 +25,6 @@ public class TelegramController {
     public void redirect(HttpServletResponse response) throws Exception
     {
         response.sendRedirect("schendule");
+
     }
 }

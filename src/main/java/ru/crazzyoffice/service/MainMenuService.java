@@ -36,9 +36,12 @@ public class MainMenuService {
 
         KeyboardRow row1 = new KeyboardRow();
         KeyboardRow row2 = new KeyboardRow();
+        KeyboardRow row3 = new KeyboardRow();
         row1.add(new KeyboardButton("Шлагбаум Пологая"));
         row2.add(new KeyboardButton("Рассписание на неделю"));
+        row3.add(new KeyboardButton("Ворота Гараж"));
         keyboard.add(row1);
+        keyboard.add(row3);
         keyboard.add(row2);
         replyKeyboardMarkup.setKeyboard(keyboard);
         return replyKeyboardMarkup;

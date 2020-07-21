@@ -22,7 +22,8 @@ public class BotConfig {
 
     @Bean
     public ArduinoSendRequest  arduinoSendRequest(){
-        return new ArduinoSendRequest(environment.getProperty("arduino.request"));
+        return new ArduinoSendRequest(environment.getProperty("arduino.request.pologaya"),
+                                        environment.getProperty("arduino.request.garage"));
     }
 
    @Bean

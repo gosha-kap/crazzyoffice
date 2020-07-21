@@ -15,15 +15,51 @@ public class JobType {
 
    private String description;
 
+   private String backgroundColor;
+
+   private String textColor;
+
+
+   private String icon;
+
    public JobType() {
     }
 
-    public JobType(Integer id , String description) {
+    public JobType(Integer id, String description) {
         this.id = id;
         this.description = description;
     }
 
+    public JobType(String description, String backgroundColor, String textColor, String icon) {
+        this.description = description;
+        this.backgroundColor = backgroundColor;
+        this.textColor = textColor;
+        this.icon = icon;
+    }
 
+    public String getBackgroundColor() {
+        return backgroundColor;
+    }
+
+    public void setBackgroundColor(String backgroundColor) {
+        this.backgroundColor = backgroundColor;
+    }
+
+    public String getTextColor() {
+        return textColor;
+    }
+
+    public void setTextColor(String textColor) {
+        this.textColor = textColor;
+    }
+
+    public String getIcon() {
+        return icon;
+    }
+
+    public void setIcon(String icon) {
+        this.icon = icon;
+    }
 
     public JobType(String json){
         String regex = ".+id=(\\d+),\\s?description=(.+).+";
@@ -54,11 +90,5 @@ public class JobType {
         this.description = description;
     }
 
-    @Override
-    public String toString() {
-        return "JobType{" +
-                "id=" + id +
-                ", description='" + description + '\'' +
-                '}';
-    }
+
 }

@@ -1,5 +1,6 @@
 package ru.crazzyoffice.bots.api;
 
+import javax.swing.plaf.synth.SynthTreeUI;
 import java.io.IOException;
 import java.net.URI;
 import java.net.http.HttpClient;
@@ -11,15 +12,22 @@ public class ArduinoSendRequest {
             .version(HttpClient.Version.HTTP_2)
             .build();
 
-    private String url;
+    private String url_pologaya;
+    private String url_garage;
 
-    public ArduinoSendRequest(String url) {
-        this.url = url;
+    public ArduinoSendRequest(String url_pologaya, String url_garage)
+    {
+        this.url_pologaya = url_pologaya;
+        this.url_garage = url_garage;
     }
 
-    public HttpResponse<String> doGet() throws IOException,InterruptedException {
+    public HttpResponse<String> doGet(POSITION position) throws IOException,InterruptedException {
+        String url  = null;
+        if(position.equals(POSITION.Pologaya)) url = this.url_pologaya;
+        else if(position.equals(POSITION.Garage)) url = this.url_garage;
+
         HttpRequest request = java.net.http.HttpRequest.newBuilder()
-                .uri(URI.create(this.url))
+                .uri(URI.create(url))
                 .header("Content-Type", "text")
                 .GET()
                 .build();

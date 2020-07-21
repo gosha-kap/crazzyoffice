@@ -6,6 +6,7 @@
   To change this template use File | Settings | File Templates.
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -22,29 +23,22 @@
 
     <!-- Bootstrap core CSS -->
     <link href="/resources/css/bootstrap.min.css" rel="stylesheet">
-
-    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
-    <link href="../../assets/css/ie10-viewport-bug-workaround.css" rel="stylesheet">
-
     <!-- Custom styles for this template -->
-    <link href="/resources/signin.css" rel="stylesheet">
+    <link href="/resources/css/signin.css" rel="stylesheet">
 
-    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
-    <!--[if lt IE 9]>
-    <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
-    <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
-    <![endif]-->
+
 </head>
 
 
     <body class="text-center">
-    <form class="form-signin" action="/login" method="post">
+    <form class="form-signin" action="perform_login"
+          method="post">
         <img class="mb-4" src="/resources/img/avatar.png" alt="">
         <h1 class="h3 mb-3 font-weight-normal">CrazyOffice</h1>
-        <label for="user" class="sr-only">Email address</label>
-        <input type="text" id="user" class="form-control" placeholder="User name" required autofocus>
-        <label for="password" class="sr-only">Password</label>
-        <input type="password" id="password" class="form-control" placeholder="Password" required>
+        <label for="name" class="sr-only">Email address</label>
+        <input type="text" id="name" name = "username" class="form-control" placeholder="User name" required autofocus>
+        <label for="pass" class="sr-only">Password</label>
+        <input type="password" id="pass" name="password" class="form-control" placeholder="Password" required>
         <div class="mb-3">
         <button class="btn btn-lg btn-primary btn-block" type="submit">Sign in</button>
         </div>
