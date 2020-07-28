@@ -6,16 +6,20 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 import ru.crazzyoffice.entity.JobEntity;
+import ru.crazzyoffice.error.IllegalRequestDataException;
 import ru.crazzyoffice.repository.EventJobRepo;
 import ru.crazzyoffice.repository.JobRepository;
 import ru.crazzyoffice.repository.PersonRepository;
 
 import java.time.LocalDate;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeParseException;
 import java.util.Objects;
 
 @Controller
@@ -34,8 +38,14 @@ public class SchenduleController {
 
     @GetMapping("/schendule")
     public ModelAndView loginPage(@RequestParam(name="date",required = false) String defaultDate){
+
         LocalDate localDate = LocalDate.now();
-        if(Objects.nonNull(defaultDate)) localDate = LocalDate.parse(defaultDate);
+        try {
+            if (Objects.nonNull(defaultDate)) localDate = LocalDate.parse(defaultDate);
+        }
+        catch(DateTimeParseException e){
+            System.out.println("Error data parametr");
+        }
         ModelAndView modelAndView = new ModelAndView("/schendule");
         modelAndView.addObject("persons",personRepository.findAll());
         modelAndView.addObject("jobs",jobRepository.findAll());
@@ -67,7 +77,7 @@ public class SchenduleController {
     @PostMapping("/schendule/delete")
     public ModelAndView deleteEvent(@RequestParam(name = "id",required = true) Integer eventId  ){
 
-        logger.debug("deleteEvent() is executed, value {}", "mkyong");
+        logger.debug("deleteEvent() is executed, value {}", eventId);
 
         eventJobRepo.deleteById(eventId);
         return loginPage(null);

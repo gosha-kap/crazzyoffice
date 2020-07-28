@@ -1,20 +1,14 @@
 package ru.crazzyoffice.service;
 
-import org.quartz.Job;
-import org.quartz.JobExecutionContext;
-import org.quartz.JobExecutionException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
-import org.springframework.stereotype.Service;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 import ru.crazzyoffice.ConvertToMessage;
 import ru.crazzyoffice.bots.CrazyBot;
 import ru.crazzyoffice.entity.TelegramUser;
-import ru.crazzyoffice.entity.WorkDay;
 import ru.crazzyoffice.repository.TelegramRepository;
-import ru.crazzyoffice.repository.WorkDayRepository;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -27,8 +21,7 @@ public class TelegramJob  {
     @Autowired
     private CrazyBot crazyBot;
 
-    @Autowired
-    private WorkDayRepository repository;
+
 
     @Autowired
     private TelegramRepository telegramRepository;
@@ -47,8 +40,8 @@ public class TelegramJob  {
         else
             localDate = LocalDate.now().plusDays(1);
 
-        WorkDay todayWork = repository.findWorkDayByDate(localDate).orElse(new WorkDay(localDate));
-        String todayWorksPrepered = ConvertToMessage.convertWorkDay(todayWork);
+
+        String todayWorksPrepered = null;
 
 
          for (TelegramUser user: chats) {

@@ -1,14 +1,7 @@
 package ru.crazzyoffice.entity.util;
 
 import ru.crazzyoffice.entity.JobEntity;
-import ru.crazzyoffice.entity.JobType;
-import ru.crazzyoffice.entity.Person;
-import ru.crazzyoffice.entity.WorkDay;
 import ru.crazzyoffice.entity.model.Event;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
 
 public  class toDTO {
     private toDTO() {

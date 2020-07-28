@@ -2,10 +2,8 @@ package ru.crazzyoffice.controller;
 
 import ru.crazzyoffice.entity.JobType;
 import ru.crazzyoffice.entity.Person;
-import ru.crazzyoffice.entity.WorkDay;
 
 import java.time.LocalDate;
-import java.util.HashMap;
 
 public  class TestData {
 
@@ -21,6 +19,5 @@ public  class TestData {
   /*  public static WorkDay workDayTestData = new WorkDay(LocalDate.now().withDayOfMonth(1));
     public static WorkDay workDay2TestData = new WorkDay(LocalDate.now().withDayOfMonth(LocalDate.now().lengthOfMonth()));*/
 
-    public static WorkDay workDayTestData = new WorkDay(LocalDate.now().withDayOfMonth(10));
-    public static WorkDay workDay2TestData = new WorkDay(LocalDate.now().withDayOfMonth(1));
+
 }

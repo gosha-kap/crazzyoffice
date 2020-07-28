@@ -89,52 +89,27 @@ public class JPAConfig {
         return driverManagerDataSource;
     }
 
-  /*  @Value("classpath:init.sql")
+    @Value("classpath:init.sql")
     private Resource schemaScript;
 
     @Value("classpath:create-db.sql")
-    private Resource dataScript;*/
+    private Resource dataScript;
 
     @Bean
     public DataSourceInitializer dataSourceInitializer(final DataSource dataSource) {
         final DataSourceInitializer initializer = new DataSourceInitializer();
         initializer.setDataSource(dataSource);
-    //    initializer.setDatabasePopulator(databasePopulator());
+        initializer.setDatabasePopulator(databasePopulator());
         return initializer;
     }
 
-/*    private DatabasePopulator databasePopulator() {
+    private DatabasePopulator databasePopulator() {
         final ResourceDatabasePopulator populator = new ResourceDatabasePopulator();
         populator.addScript(schemaScript);
         populator.setSqlScriptEncoding("utf-8");
         populator.addScript(dataScript);
         return populator;
-    }*/
-
-/*    @Bean
-    public DataSource securityDataSource(){
-        ComboPooledDataSource source = new ComboPooledDataSource();
-        try {
-            source.setDriverClass(environment.getProperty("jdbc.driver"));
-        } catch (PropertyVetoException e) {
-            throw  new RuntimeException(e);
-        }
-
-        //logger.info(">>>>jdbc.url: "+environment.getProperty("jdbc.url"));
-        //logger.info(">>>>jdbc.user: "+environment.getProperty("jdbc.user"));
-
-        source.setJdbcUrl(environment.getProperty("jdbc.url"));
-        source.setUser(environment.getProperty("jdbc.user"));
-        source.setPassword(environment.getProperty("jdbc.password"));
-
-
-        source.setInitialPoolSize(geIntProperty("connection.pool.initialPoolSize"));
-        source.setMinPoolSize(geIntProperty("connection.pool.minPoolSize"));
-        source.setMaxPoolSize(geIntProperty("connection.pool.maxPoolSize"));
-        source.setMaxIdleTime(geIntProperty("connection.pool.maxIdleTime"));
-
-        return  source;
-    }*/
+    }
 
 
 

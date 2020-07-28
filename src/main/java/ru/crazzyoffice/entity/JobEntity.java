@@ -18,10 +18,6 @@ public class JobEntity {
     private Integer id;
 
     @Convert(converter = DateConverter.class)
-    @JsonFormat(shape = JsonFormat.Shape.STRING,pattern="yyyy-MM-dd")
-    @JsonSerialize(using = LocalDateSerializer.class)
-    @JsonDeserialize(using = LocalDateDeserializer.class)
-    @NotNull
     private LocalDate date;
 
     @ManyToOne

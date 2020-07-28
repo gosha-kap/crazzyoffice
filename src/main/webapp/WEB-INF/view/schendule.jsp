@@ -46,7 +46,11 @@
                         </thead>
                         <tbody>
                         <tr>
-                            <td><input  id="datepicker" name="datepicker" class="form-control"></td>
+                            <td><input  id="datepicker" name="datepicker" class="form-control" required="required"
+                              pattern="[0-9]{4}-(0[1-9]|1[012])-(0[1-9]|1[0-9]|2[0-9]|3[01])"
+
+
+                                        title="Введмие дату в формате yyyy-mm-dd"/></td>
                             <td>
                             <select name="job" class="form-control">
                                 <c:forEach var="job" items="${jobs}">

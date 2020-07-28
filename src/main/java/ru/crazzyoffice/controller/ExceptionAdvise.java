@@ -25,7 +25,7 @@ import javax.validation.ConstraintViolationException;
 
 import static ru.crazzyoffice.error.ErrorType.*;
 
-@RestControllerAdvice
+@ControllerAdvice
 public class ExceptionAdvise {
 
 
