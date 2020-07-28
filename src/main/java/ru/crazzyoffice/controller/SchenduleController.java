@@ -1,26 +1,28 @@
 package ru.crazzyoffice.controller;
 
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 import ru.crazzyoffice.entity.JobEntity;
-import ru.crazzyoffice.error.IllegalRequestDataException;
 import ru.crazzyoffice.repository.EventJobRepo;
 import ru.crazzyoffice.repository.JobRepository;
 import ru.crazzyoffice.repository.PersonRepository;
 
 import java.time.LocalDate;
-import java.time.ZonedDateTime;
 import java.util.Objects;
 
 @Controller
 public class SchenduleController {
+
+    private static final Logger logger =
+            LoggerFactory.getLogger(SchenduleController.class);
 
     @Autowired
     private PersonRepository personRepository;
@@ -65,8 +67,9 @@ public class SchenduleController {
     @PostMapping("/schendule/delete")
     public ModelAndView deleteEvent(@RequestParam(name = "id",required = true) Integer eventId  ){
 
-         eventJobRepo.deleteById(eventId);
-        //LocalDate date = ZonedDateTime.parse(defaultDate).toLocalDate();
+        logger.debug("deleteEvent() is executed, value {}", "mkyong");
+
+        eventJobRepo.deleteById(eventId);
         return loginPage(null);
     }
 

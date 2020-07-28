@@ -3,6 +3,7 @@ package ru.crazzyoffice.controller;
 
 
 import org.springframework.core.Ordered;
+import org.springframework.core.annotation.AnnotationUtils;
 import org.springframework.core.annotation.Order;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
@@ -11,6 +12,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
+import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.NoHandlerFoundException;
 import ru.crazzyoffice.error.ErrorResponse;
 import ru.crazzyoffice.error.ErrorType;
 import ru.crazzyoffice.error.IllegalRequestDataException;
@@ -28,55 +31,65 @@ public class ExceptionAdvise {
 
     @ExceptionHandler({NotFoundException.class })
     @ResponseStatus(value = HttpStatus.NOT_FOUND )
-    public ErrorResponse handleError(HttpServletRequest req, NotFoundException e) {
-        return   logAndGetErrorInfo(req, e, false, DATA_NOT_FOUND);
+    public ModelAndView handleError(HttpServletRequest req, NotFoundException e) {
+        return   logAndGetErrorInfo(req, e, true, DATA_NOT_FOUND);
     }
 
 
     @ExceptionHandler({MethodArgumentTypeMismatchException.class, HttpMessageNotReadableException.class})
     @ResponseStatus(value = HttpStatus.BAD_REQUEST)
-    public ErrorResponse illegalRequestDataError(HttpServletRequest req, Exception e) {
-        return logAndGetErrorInfo(req, e, false, VALIDATION_ERROR);
+    public ModelAndView illegalRequestDataError(HttpServletRequest req, Exception e) {
+        return logAndGetErrorInfo(req, e, true, VALIDATION_ERROR);
     }
 
     @ResponseStatus(value = HttpStatus.BAD_REQUEST)
     @ExceptionHandler(IllegalRequestDataException.class)
-    public ErrorResponse conflict(HttpServletRequest req, Exception e) {
-        return logAndGetErrorInfo(req, e, false, DATA_ERROR);
+    public ModelAndView conflict(HttpServletRequest req, Exception e) {
+        return logAndGetErrorInfo(req, e, true, DATA_ERROR);
     }
 
-/*
-
-    @ResponseStatus(value = HttpStatus.BAD_REQUEST)
-    @ExceptionHandler({NotFoundException.class, MethodArgumentTypeMismatchException.class, HttpMessageNotReadableException.class})
-    public ErrorResponse illegalRequestDataError(HttpServletRequest req, Exception e) {
-        return logAndGetErrorInfo(req, e, false, VALIDATION_ERROR);
-    }
 
     @ResponseStatus(value = HttpStatus.UNPROCESSABLE_ENTITY)
     @ExceptionHandler(ConstraintViolationException.class)
-    public ErrorResponse validationError(HttpServletRequest req, Exception e) {
-        return logAndGetErrorInfo(req, e, false, VALIDATION_ERROR);
+    public ModelAndView validationError(HttpServletRequest req, Exception e) {
+        return logAndGetErrorInfo(req, e, true, VALIDATION_ERROR);
     }
 
 
-    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
-    @ExceptionHandler(Exception.class)
-    public ErrorResponse handleError(HttpServletRequest req, Exception e) {
+
+    @ExceptionHandler(NoHandlerFoundException.class)
+    public ModelAndView handleError(HttpServletRequest req, Exception e) {
+        return logAndGetErrorInfo(req, e, true, PAGE_NOT_FOUND);
+    }
+
+    @ExceptionHandler(value = Exception.class)
+    public ModelAndView   defaultErrorHandler(HttpServletRequest req, Exception e) throws Exception {
+
+        if (AnnotationUtils.findAnnotation
+                (e.getClass(), ResponseStatus.class) != null)
+            throw e;
+
+
         return logAndGetErrorInfo(req, e, true, APP_ERROR);
-    }*/
+    }
 
 
 
 
-    private static ErrorResponse logAndGetErrorInfo(HttpServletRequest req, Exception e, boolean logException, ErrorType errorType) {
+    private static ModelAndView logAndGetErrorInfo(HttpServletRequest req, Exception e, boolean logException, ErrorType errorType) {
         Throwable rootCause = getRootCause(e);
-      /*  if (logException) {
-            log.error(errorType + " at request " + req.getRequestURL(), rootCause);
-        } else {
-            log.warn("{} at request  {}: {}", errorType, req.getRequestURL(), rootCause.toString());
-        }*/
-        return new ErrorResponse(req.getRequestURL(), errorType, rootCause.toString());
+
+       // log.error(errorType + " at request " + req.getRequestURL(), rootCause);
+
+        System.out.println("URL - "+req.getRequestURL());
+        System.out.println("ErrorTYpe -"+errorType);
+        System.out.println("Case - " + rootCause);
+
+        ModelAndView modelAndView = new ModelAndView("error");
+        ErrorResponse errorResponse = new  ErrorResponse(req.getRequestURL(), errorType, rootCause.toString());
+
+        modelAndView.addObject("not_found",errorType.equals(PAGE_NOT_FOUND) ? true : false);
+        return modelAndView;
     }
 
     private static Throwable getRootCause(Throwable t) {

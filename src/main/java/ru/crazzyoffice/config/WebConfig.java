@@ -19,6 +19,12 @@ import org.springframework.web.servlet.view.JstlView;
 @ComponentScan(basePackages = "ru.crazzyoffice")
 public class WebConfig implements WebMvcConfigurer {
 
+    @Override
+    public void addViewControllers(ViewControllerRegistry registry) {
+       registry.addViewController("/error").setViewName("error");
+      }
+
+
 
 
     @Bean
