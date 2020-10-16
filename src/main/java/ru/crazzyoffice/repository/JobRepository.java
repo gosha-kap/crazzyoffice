@@ -14,4 +14,6 @@ public interface   JobRepository  extends JpaRepository<JobType,Integer> {
     @Modifying
     @Query("DELETE FROM JobType r WHERE r.id=:id")
     int delete(@Param("id") int id);
+
+
 }
