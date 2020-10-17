@@ -1,9 +1,6 @@
 package ru.crazzyoffice.entity;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 @Entity
 public class TelegramUser {
@@ -12,16 +9,31 @@ public class TelegramUser {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
+    private Integer userId;
+
     private String chatId;
 
-    private Integer userId;
+    private Boolean autorised;
+
+    @OneToOne(cascade ={CascadeType.PERSIST, CascadeType.DETACH,CascadeType.MERGE,CascadeType.REFRESH})
+    @JoinColumn(name = "person_id", referencedColumnName = "id")
+    private Person person;
 
     public TelegramUser() {
     }
 
-    public TelegramUser(String chatId, Integer userId) {
-        this.chatId = chatId;
-        this.userId = userId;
+    public TelegramUser(Integer userId, Person person ,Boolean auth) {
+         this.userId = userId;
+         this.person =person;
+         this.autorised = auth;
+    }
+
+    public Person getPerson() {
+        return person;
+    }
+
+    public void setPerson(Person person) {
+        this.person = person;
     }
 
     public Integer getId() {
@@ -32,19 +44,27 @@ public class TelegramUser {
         this.id = id;
     }
 
-    public String getChatId() {
-        return chatId;
-    }
-
-    public void setChatId(String chatId) {
-        this.chatId = chatId;
-    }
-
     public Integer getUserId() {
         return userId;
     }
 
     public void setUserId(Integer userId) {
         this.userId = userId;
+    }
+
+    public Boolean getAutorised() {
+        return autorised;
+    }
+
+    public void setAutorised(Boolean autorised) {
+        this.autorised = autorised;
+    }
+
+    public String getChatId() {
+        return chatId;
+    }
+
+    public void setChatId(String chatId) {
+        this.chatId = chatId;
     }
 }

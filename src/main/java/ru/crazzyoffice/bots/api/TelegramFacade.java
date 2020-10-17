@@ -11,12 +11,15 @@ import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import ru.crazzyoffice.ConvertToMessage;
 import ru.crazzyoffice.controller.SchenduleController;
+import ru.crazzyoffice.entity.DEPARTMENT;
 import ru.crazzyoffice.entity.JobEntity;
+import ru.crazzyoffice.entity.Person;
 import ru.crazzyoffice.entity.TelegramUser;
 import ru.crazzyoffice.repository.EventJobRepo;
 import ru.crazzyoffice.repository.TelegramRepository;
 import ru.crazzyoffice.service.MainMenuService;
 
+import javax.validation.constraints.Null;
 import java.io.IOException;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
@@ -43,73 +46,84 @@ public class TelegramFacade {
     private EventJobRepo eventJobRepo;
 
     private static final Logger logger =
-            LoggerFactory.getLogger(SchenduleController.class);
+            LoggerFactory.getLogger(TelegramFacade.class);
 
     public BotApiMethod<?> handleUpdate(Update update) {
 
         Message message = update.getMessage();
         String inputMsg = message.getText();
-        String outMsg;
         int userId = message.getFrom().getId();
         long chatId = message.getChatId();
+        String userName = message.getContact().getFirstName();
+        String lastName = message.getContact().getLastName();
+        String phone = message.getContact().getPhoneNumber();
+        String outMsg;
 
-        if (message != null && message.hasText()) {
-            TelegramUser telegramUser = repository.getByUserId(userId).orElse(null);
-            if(telegramUser!=null) {
-                switch (inputMsg){
-                    case "Шлагбаум Пологая":
-                        logger.debug("Trying to open POLOGAYA by , value {}", telegramUser);
-                        try {
-                            arduinoSendRequest.doGet(POSITION.Pologaya);
-                        } catch (IOException e) {
-                            logger.error("Error  POLOGAYA : , value {}", e.getMessage());
-                            outMsg = "Произошла ошибка";
-                            break;
-                        } catch (InterruptedException e) {
-                            logger.error("Error  POLOGAYA : , value {}", e.getMessage());
-                            outMsg = "Ошибка.Нет связи.";
-                            break;
-                        }
-                        outMsg = "Пожалуйста, проезжайте";
+        TelegramUser telegramUser = repository.getByUserId(userId).orElse(
+                new TelegramUser(userId, new Person(userName, lastName, phone), false));
+
+        if (telegramUser.getAutorised()) {
+            DEPARTMENT department = telegramUser.getPerson().getDepartment();
+            String personName = telegramUser.getPerson().getFirstName()+"_"+telegramUser.getPerson().getLastName();
+            switch (inputMsg) {
+                case "Шлагбаум Пологая":
+                    logger.debug("Open POLOGAYA by {}",personName );
+                    try {
+                        arduinoSendRequest.doGet(POSITION.Pologaya);
+                    } catch (IOException e) {
+                        logger.error("Error  POLOGAYA :  {}", e.getMessage());
+                        outMsg = "Ошибка: Нет ответа.";
                         break;
-                    case "Ворота Гараж":
-                        logger.debug("Trying to open GARAGE by , value {}", telegramUser);
+                    } catch (InterruptedException e) {
+                        logger.error("Error  POLOGAYA :  {}", e.getMessage());
+                        outMsg = "Произошла ошибка";
+                        break;
+                    }
+                    outMsg = "Пожалуйста, проезжайте";
+                    break;
+                case "Ворота Гараж":
+                    if (department.equals(DEPARTMENT.VSK)) {
+                        logger.debug("Trying to open GARAGE by {}", personName);
                         try {
                             arduinoSendRequest.doGet(POSITION.Garage);
                         } catch (IOException e) {
-                            logger.error("Error  Garage : , value {}", e.getMessage());
-                            outMsg = "Произошла ошибка";
+                            logger.error("Error  Garage :  {}", e.getMessage());
+                            outMsg = "Ошибка: Нет ответа.";
                             break;
                         } catch (InterruptedException e) {
-                            logger.error("Error  Garage : , value {}", e.getMessage());
-                            outMsg = "Ошибка.Нет связи.";
+                            logger.error("Error  Garage : {}", e.getMessage());
+                            outMsg = "Произошла ошибка";
                             break;
                         }
                         outMsg = "Пожалуйста, проезжайте";
-                        break;
+                    } else outMsg = "Отказано в доступе";
+                    break;
 
-                    case "Рассписание на неделю":
+                    /*case "Рассписание на неделю":
                         logger.debug("Get shendule by  , value {}", telegramUser);
                         LocalDate monday = LocalDate.now().with(DayOfWeek.MONDAY);
                         LocalDate sunday = LocalDate.now().with(DayOfWeek.SUNDAY);
 
                         List<JobEntity> weekJobs = eventJobRepo.getWeekEvents(monday,sunday);
                         outMsg = ConvertToMessage.convertEvents(weekJobs);
-
-                        break;
-                    default:
-                        outMsg = "Воспользуйтесь главным меню";
-                }
-                return mainMenuService.getMainMenuMessage(chatId, outMsg);
+                        break;*/
+                default:
+                    outMsg = "Воспользуйтесь главным меню";
             }
-         else
-             logger.debug("Unauthorised request by , value {}", telegramUser);
-             return new SendMessage(chatId,"Вы не авторизованы");
-         }
-        else
-            return null;
-
-
+            return mainMenuService.getMainMenuMessage(chatId, outMsg, department);
+        } else {
+            logger.debug("Unauthorised request by , value {}", "id=" + userId + " ,name=" + userName + " " + lastName + " ,phone=" + phone);
+            switch (inputMsg) {
+                case "Авторизоваться":
+                    repository.save(telegramUser);
+                    outMsg = "Запрос отправлен";
+                    break;
+                default:
+                    outMsg = "Вы не авторизованы";
+            }
+            return mainMenuService.getAuthMenuMessage(chatId, outMsg);
+        }
 
     }
 }
+

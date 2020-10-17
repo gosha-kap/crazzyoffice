@@ -1,10 +1,12 @@
 package ru.crazzyoffice.service;
 
 import org.springframework.stereotype.Service;
+import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboardMarkup;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.KeyboardButton;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.KeyboardRow;
+import ru.crazzyoffice.entity.DEPARTMENT;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,15 +19,15 @@ import java.util.List;
 @Service
 public class MainMenuService {
 
-    public SendMessage getMainMenuMessage(final long chatId, final String textMessage) {
-        final ReplyKeyboardMarkup replyKeyboardMarkup = getMainMenuKeyboard();
+    public SendMessage getMainMenuMessage(final long chatId, final String textMessage , DEPARTMENT department) {
+        final ReplyKeyboardMarkup replyKeyboardMarkup = getMainMenuKeyboard(department);
         final SendMessage mainMenuMessage =
                 createMessageWithKeyboard(chatId, textMessage, replyKeyboardMarkup);
 
         return mainMenuMessage;
     }
 
-    private ReplyKeyboardMarkup getMainMenuKeyboard() {
+    private ReplyKeyboardMarkup getMainMenuKeyboard(DEPARTMENT department) {
 
         final ReplyKeyboardMarkup replyKeyboardMarkup = new ReplyKeyboardMarkup();
         replyKeyboardMarkup.setSelective(true);
@@ -35,14 +37,17 @@ public class MainMenuService {
         List<KeyboardRow> keyboard = new ArrayList<>();
 
         KeyboardRow row1 = new KeyboardRow();
-        KeyboardRow row2 = new KeyboardRow();
-        KeyboardRow row3 = new KeyboardRow();
         row1.add(new KeyboardButton("Шлагбаум Пологая"));
-        row2.add(new KeyboardButton("Рассписание на неделю"));
-        row3.add(new KeyboardButton("Ворота Гараж"));
         keyboard.add(row1);
-        keyboard.add(row3);
-        keyboard.add(row2);
+
+        if(department.equals(DEPARTMENT.VSK)){
+        KeyboardRow row3 = new KeyboardRow();
+        row3.add(new KeyboardButton("Ворота Гараж"));
+        keyboard.add(row3);}
+
+        //  KeyboardRow row2 = new KeyboardRow();
+        // row2.add(new KeyboardButton("Рассписание на неделю"));
+       // keyboard.add(row2);
         replyKeyboardMarkup.setKeyboard(keyboard);
         return replyKeyboardMarkup;
     }
@@ -58,5 +63,28 @@ public class MainMenuService {
             sendMessage.setReplyMarkup(replyKeyboardMarkup);
         }
         return sendMessage;
+    }
+
+    public BotApiMethod<?> getAuthMenuMessage(final long chatId, final String textMessage) {
+        final ReplyKeyboardMarkup replyKeyboardMarkup = getAuthMenuKeyboard();
+        final SendMessage authMenuMessage =
+                createMessageWithKeyboard(chatId, textMessage, replyKeyboardMarkup);
+
+        return authMenuMessage;
+    }
+
+    private ReplyKeyboardMarkup getAuthMenuKeyboard() {
+        final ReplyKeyboardMarkup replyKeyboardMarkup = new ReplyKeyboardMarkup();
+        replyKeyboardMarkup.setSelective(true);
+        replyKeyboardMarkup.setResizeKeyboard(true);
+        replyKeyboardMarkup.setOneTimeKeyboard(false);
+
+        List<KeyboardRow> keyboard = new ArrayList<>();
+
+         KeyboardRow row = new KeyboardRow();
+         row.add(new KeyboardButton("Авторизоваться"));
+         keyboard.add(row);
+         replyKeyboardMarkup.setKeyboard(keyboard);
+        return replyKeyboardMarkup;
     }
 }

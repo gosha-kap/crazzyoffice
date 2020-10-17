@@ -26,7 +26,8 @@ INSERT  INTO public.person_workday_relashion (workday_id,person_id,person_job) V
 INSERT  INTO public.person_workday_relashion (workday_id,person_id,person_job) VALUES (2,2,3);
 INSERT  INTO public.person_workday_relashion (workday_id,person_id,person_job) VALUES (2,3,2);
 
-INSERT INTO public.telegramuser (userId) values (757320166);
+INSERT INTO public.telegramuser (userId,person_id) values (757320166,1);
+INSERT INTO public.telegramuser (userId,person_id) values (757320000,2);
 
 INSERT INTO public.jobentity (date,job_person,job_event) values (date_trunc('month', CURRENT_DATE),2,2);
 INSERT INTO public.jobentity (date,job_person,job_event) values (date_trunc('month', CURRENT_DATE),1,1);

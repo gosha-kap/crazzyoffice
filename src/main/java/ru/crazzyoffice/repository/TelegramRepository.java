@@ -26,4 +26,6 @@ public interface TelegramRepository extends JpaRepository<TelegramUser,Integer> 
     @Query("DELETE FROM TelegramUser r WHERE r.id=:id")
     int delete(@Param("id") int id);
 
+    
+
 }

@@ -45,18 +45,5 @@ public class TelegramUserController {
         return repository.save(telegramUser);
     }
 
-   /* @PutMapping(value ="/{id}", consumes = MediaType.APPLICATION_JSON_VALUE)
-    @ResponseStatus(value = HttpStatus.ACCEPTED)
-    public Person update(@PathVariable  Integer id,
-                         @RequestBody Person newPerson){
 
-        if (newPerson.getId() != id)
-            throw new IllegalRequestDataException(newPerson + " must be with id=" + id);
-        return repository.findById(id)
-                .map(person -> {
-                    person.setAlias(newPerson.getAlias());
-                    return repository.save(person);
-                }).orElseThrow(() -> new NotFoundException("no entity find with id= " + id));
-
-    }*/
 }
