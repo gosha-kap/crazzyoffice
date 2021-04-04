@@ -3,6 +3,7 @@ package ru.crazzyoffice.controller;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MvcResult;
+import ru.crazzyoffice.entity.DEPARTMENT;
 import ru.crazzyoffice.entity.JobType;
 import ru.crazzyoffice.entity.Person;
 
@@ -43,7 +44,7 @@ class PersonControllerTest extends  AbstractTestController {
     @Test
     void create() throws Exception {
         String uri = "/person";
-        Person job = new Person("TestAlias");
+        Person job = new Person("TestAlias", DEPARTMENT.Кадры);
         String inputJson = super.mapToJson(job);
 
         MvcResult mvcResult = this.mockMvc.perform(post(uri)
@@ -59,7 +60,7 @@ class PersonControllerTest extends  AbstractTestController {
     @Test
     void update() throws  Exception {
         String uri = "/person/2";
-        Person person = new Person(2,"TestAlias");
+        Person person = new Person(2,"TestAlias",DEPARTMENT.Кадры);
         String inputJson = super.mapToJson(person);
 
         MvcResult mvcResult = this.mockMvc.perform(put(uri)
@@ -103,7 +104,7 @@ class PersonControllerTest extends  AbstractTestController {
     @Test
     void createWrongEntity() throws Exception {
         String uri = "/person";
-        Person person = new Person(3,"TestAlias");
+        Person person = new Person(3,"TestAlias",DEPARTMENT.Кадры);
         String inputJson = super.mapToJson(person);
 
         this.mockMvc.perform(post(uri)
@@ -123,7 +124,7 @@ class PersonControllerTest extends  AbstractTestController {
     @Test
     void updateWrongID() throws  Exception {
         String uri = "/person/2";
-        Person person = new Person(3,"UpdatedData");
+        Person person = new Person(3,"UpdatedData",DEPARTMENT.Кадры);
         String inputJson = super.mapToJson(person);
         this.mockMvc.perform(put(uri)
                 .contentType(MediaType.APPLICATION_JSON_VALUE).content(inputJson))

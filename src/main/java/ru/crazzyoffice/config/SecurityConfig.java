@@ -4,17 +4,15 @@ package ru.crazzyoffice.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-import org.springframework.security.core.userdetails.User;
-import org.springframework.security.core.userdetails.User.UserBuilder;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.provisioning.InMemoryUserDetailsManager;
+import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
+import ru.crazzyoffice.config.handler.MySimpleUrlAuthenticationSuccessHandler;
 
 import static org.springframework.security.config.Customizer.withDefaults;
 
@@ -31,31 +29,40 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                         .antMatchers("/resources/**").permitAll()
                         .antMatchers("/").permitAll()
                         .antMatchers("/schendule").hasRole("ADMIN")
+                        .antMatchers("/pologaya").hasRole("USER")
                         .anyRequest().authenticated()
                 )
 
                 .formLogin(form -> form
                                 .loginPage("/signin")
                                 .loginProcessingUrl("/perform_login")
-                                .defaultSuccessUrl("/schendule", true)
+                                .successHandler(myAuthenticationSuccessHandler())
+                                //.defaultSuccessUrl("/schendule", true)
                                 .failureUrl("/signin?error=true")
                                 .permitAll())
 
                 .httpBasic(withDefaults());
-
-
     }
 
     @Override
     protected void configure(final AuthenticationManagerBuilder auth) throws Exception {
         auth.inMemoryAuthentication()
-                .withUser("admin").password(passwordEncoder().encode("vremenno")).roles("ADMIN");
+                .withUser("admin").password(passwordEncoder().encode("vremenno")).roles("ADMIN").and().
+                withUser("duty").password(passwordEncoder().encode("555555")).roles("USER");
+
     }
 
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
+
+    @Bean
+    public AuthenticationSuccessHandler myAuthenticationSuccessHandler(){
+        return new MySimpleUrlAuthenticationSuccessHandler();
+    }
+
+
 
 
 

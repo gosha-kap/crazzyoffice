@@ -40,7 +40,7 @@ public class MainMenuService {
         row1.add(new KeyboardButton("Шлагбаум Пологая"));
         keyboard.add(row1);
 
-        if(department.equals(DEPARTMENT.VSK)){
+        if(department.equals(DEPARTMENT.Отдел_В)){
         KeyboardRow row3 = new KeyboardRow();
         row3.add(new KeyboardButton("Ворота Гараж"));
         keyboard.add(row3);}

@@ -1,10 +1,12 @@
 package ru.crazzyoffice.controller;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
-import ru.crazzyoffice.entity.Person;
+import org.springframework.web.servlet.ModelAndView;
 import ru.crazzyoffice.entity.TelegramUser;
 import ru.crazzyoffice.error.IllegalRequestDataException;
 import ru.crazzyoffice.error.NotFoundException;
@@ -14,21 +16,36 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
-@RequestMapping(value = "/tmuser")
+@RequestMapping(value = "/pologaya")
 public class TelegramUserController {
 
     @Autowired
     private TelegramRepository repository;
 
-    @GetMapping(produces =  MediaType.APPLICATION_JSON_VALUE)
-    public List<TelegramUser> getAll(){
-         return  repository.getAll();
+    private static final Logger logger =
+            LoggerFactory.getLogger(TelegramUserController.class);
+
+
+    @GetMapping
+    public ModelAndView loginPage(){
+
+            ModelAndView modelAndView = new ModelAndView("/pologaya");
+            modelAndView.addObject("tmusers",repository.getAll());
+            return modelAndView;
+
     }
 
     @GetMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public TelegramUser getOne(@PathVariable Integer id){
-        return Optional.of(repository.findById(id)).
+    @ResponseStatus(value = HttpStatus.OK)
+    public String getOne(@PathVariable Integer id){
+        TelegramUser telegramUser = Optional.of(repository.findById(id)).
                 get().orElseThrow(()-> new NotFoundException("no user with id = "+id+" found"));
+       // ------------------------------------------------
+
+
+
+       //-------------------------------------------------
+        return telegramUser.toString();
     }
 
     @DeleteMapping(value = "/{id}" , produces = MediaType.APPLICATION_JSON_VALUE)
@@ -44,6 +61,8 @@ public class TelegramUserController {
             throw new IllegalRequestDataException(telegramUser + " must be new (id=null)");
         return repository.save(telegramUser);
     }
+
+
 
 
 }

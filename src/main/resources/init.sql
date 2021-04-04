@@ -1,19 +1,18 @@
 DROP TABLE IF EXISTS person_workday_relashion;
 DROP table if exists jobentity;
 DROP TABLE IF EXISTS workDay;
-DROP TABLE IF EXISTS person;
 DROP TABLE if EXISTS jobtype;
 Drop Table if exists telegramuser;
-
+DROP TABLE IF EXISTS person;
 
 CREATE TABLE person (
 
   id  serial PRIMARY KEY ,
   alias varchar UNIQUE DEFAULT 'unkown',
-  firstName varchar DEFAULT NULL,
-  lastName varchar DEFAULT NULL,
-  phone varchar DEFAULT NULL,
-  department varchar DEFAULT NULL
+  firstName varchar DEFAULT '-',
+  lastName varchar DEFAULT '-',
+  phone varchar DEFAULT '-',
+  department varchar DEFAULT '000'
 );
 
 

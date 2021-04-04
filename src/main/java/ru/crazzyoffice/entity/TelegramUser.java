@@ -67,4 +67,16 @@ public class TelegramUser {
     public void setChatId(String chatId) {
         this.chatId = chatId;
     }
+
+
+    @Override
+    public String toString() {
+        return "TelegramUser{" +
+                "id=" + id +
+                ", userId=" + userId +
+                ", chatId='" + chatId + '\'' +
+                ", autorised=" + autorised +
+                ", person=" + person +
+                '}';
+    }
 }

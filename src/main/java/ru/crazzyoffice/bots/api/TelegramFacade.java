@@ -82,7 +82,7 @@ public class TelegramFacade {
                     outMsg = "Пожалуйста, проезжайте";
                     break;
                 case "Ворота Гараж":
-                    if (department.equals(DEPARTMENT.VSK)) {
+                    if (department.equals(DEPARTMENT.Отдел_В)) {
                         logger.debug("Trying to open GARAGE by {}", personName);
                         try {
                             arduinoSendRequest.doGet(POSITION.Garage);
