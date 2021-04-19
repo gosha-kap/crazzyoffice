@@ -28,8 +28,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .authorizeRequests(authorize -> authorize
                         .antMatchers("/resources/**").permitAll()
                         .antMatchers("/").permitAll()
-                        .antMatchers("/schendule").hasRole("ADMIN")
-                        .antMatchers("/pologaya").hasRole("USER")
+                        .antMatchers("/pologaya").hasRole("ADMIN")
                         .anyRequest().authenticated()
                 )
 
@@ -37,7 +36,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                                 .loginPage("/signin")
                                 .loginProcessingUrl("/perform_login")
                                 .successHandler(myAuthenticationSuccessHandler())
-                                //.defaultSuccessUrl("/schendule", true)
                                 .failureUrl("/signin?error=true")
                                 .permitAll())
 
@@ -47,8 +45,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(final AuthenticationManagerBuilder auth) throws Exception {
         auth.inMemoryAuthentication()
-                .withUser("admin").password(passwordEncoder().encode("vremenno")).roles("ADMIN").and().
-                withUser("duty").password(passwordEncoder().encode("555555")).roles("USER");
+                .withUser("admin").password(passwordEncoder().encode("vremenno")).roles("ADMIN").and();
+
 
     }
 

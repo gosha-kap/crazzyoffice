@@ -62,7 +62,6 @@ public class JPAConfig {
 
     final Properties additionalProperties() {
         final Properties hibernateProperties = new Properties();
-      //  hibernateProperties.setProperty("hibernate.hbm2ddl.auto", environment.getProperty("hibernate.hbm2ddl.auto"));
         hibernateProperties.setProperty("hibernate.dialect", environment.getProperty("hibernate.dialect"));
         hibernateProperties.setProperty("hibernate.cache.use_second_level_cache", environment.getProperty("hibernate.cache.use_second_level_cache"));
         hibernateProperties.setProperty("hibernate.cache.use_query_cache", environment.getProperty("hibernate.cache.use_query_cache"));
@@ -89,11 +88,6 @@ public class JPAConfig {
         return driverManagerDataSource;
     }
 
-/*    @Value("classpath:init.sql")
-    private Resource schemaScript;
-
-    @Value("classpath:create-db.sql")
-    private Resource dataScript;*/
 
     @Bean
     public DataSourceInitializer dataSourceInitializer(final DataSource dataSource) {
@@ -105,9 +99,7 @@ public class JPAConfig {
 
     private DatabasePopulator databasePopulator() {
         final ResourceDatabasePopulator populator = new ResourceDatabasePopulator();
-      //  populator.addScript(schemaScript);
         populator.setSqlScriptEncoding("utf-8");
-       // populator.addScript(dataScript);
         return populator;
     }
 

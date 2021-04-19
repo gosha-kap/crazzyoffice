@@ -15,7 +15,7 @@ import java.util.Optional;
 @Repository
 public interface TelegramRepository extends JpaRepository<TelegramUser,Integer> {
 
-    public Optional<TelegramUser> getByUserId(Integer userId);
+    public Optional<TelegramUser> getByUserId(Long userId);
 
 
     @Query("SELECT p FROM TelegramUser p")

@@ -79,11 +79,12 @@ public class ExceptionAdvise {
     private static ModelAndView logAndGetErrorInfo(HttpServletRequest req, Exception e, boolean logException, ErrorType errorType) {
         Throwable rootCause = getRootCause(e);
 
-       // log.error(errorType + " at request " + req.getRequestURL(), rootCause);
+        //log.error(errorType + " at request " + req.getRequestURL(), rootCause);
 
         System.out.println("URL - "+req.getRequestURL());
         System.out.println("ErrorTYpe -"+errorType);
         System.out.println("Case - " + rootCause);
+        System.out.println("Exception - " + e.toString());
 
         ModelAndView modelAndView = new ModelAndView("error");
         ErrorResponse errorResponse = new  ErrorResponse(req.getRequestURL(), errorType, rootCause.toString());

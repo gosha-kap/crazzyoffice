@@ -55,41 +55,25 @@
                         <span id = "edit_name" data-id =''  aria-hidden="true">&times;</span>
                     </button>
                 </div>
-                <div class="modal-body mx-3">
-                    <div class="md-form mb-5">
-                        <label data-error="wrong" data-success="right" for="formNameEdit1">Фамилия</label>
-                        <input type="text" id="formNameEdit1" class="form-control validate">
-                    </div>
-
-                    <div class="md-form mb-5">
-                        <label data-error="wrong" data-success="right" for="formNameEdit1">Имя</label>
-                        <input type="text" id="formNameEdit2" class="form-control validate">
-
-                    </div>
-
-                    <div class="md-form mb-5">
-                        <label data-error="wrong" data-success="right" for="formPositionEdit1">Отдел</label>
-                        <select id="formPositionEdit1" class="form-control validate">
-                            <option>ВСК</option>
-                        </select>
-
-                    </div>
-
-                    <div class="md-form mb-5">
-                        <label data-error="wrong" data-success="right" for="formOfficeEdit1">Номер телефона</label>
-                        <input type="text" id="formOfficeEdit1" class="form-control validate">
-                    </div>
-
-                    <div class="md-form mb-5">
-                        <label data-error="wrong" data-success="right" for="formAgeEdit1">Авторизован</label>
-                        <input type="checkbox" id="formAgeEdit1" class="form-control validate">
-                    </div>
+                <div class="modal-body">
+                    <form  id="edit_form">
+                        <label for="first">Имя</label>
+                        <input type="text" name="first" id="first" class="form-control" required />
+                        <br />
+                        <label for="last">Фамилия</label>
+                        <input type="text" name="last" id="last" class="form-control" required/>
+                        <br />
+                        <label>Авторизован</label>
+                         <input type="checkbox" id="autorised" name="autorised">
+                        <br />
+                        <input type="hidden"  id="employee_id"  name="employee_id" />
+                    </form>
                 </div>
 
                 <div class="modal-footer d-flex justify-content-center editInsideWrapper">
-                    <button class="btn btn-outline-secondary btn-block editInside" data-dismiss="modal">Редактировать
-                        <i class="fas fa-paper-plane-o ml-1"></i>
-                    </button>
+                    <button type="button" class="btn btn-primary" id="edit_butt">Редактировать</button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Отмена</button>
+
                 </div>
             </div>
         </div>
@@ -105,9 +89,8 @@
         <thead class="thead-dark">
         <tr>
             <th scope="col">id</th>
-            <th scope="col">Фамилия Имя</th>
-            <th scope="col">Отдел</th>
-            <th scope="col">Телефон</th>
+            <th scope="col">Фамилия</th>
+            <th scope="col">Имя</th>
             <th scope="col">Авторизован</th>
             <th scope="col">Изменить</th>
             <th scope="col">Удалить</th>
@@ -118,9 +101,8 @@
         <c:forEach var="tmuser" items="${tmusers}">
             <tr>
                 <th scope="row">${tmuser.userId}</th>
-                <td>${tmuser.person.lastName} ${tmuser.person.firstName}</td>
-                <td>${tmuser.person.department}</td>
-                <td>${tmuser.person.phone}</td>
+                <td>${tmuser.last}</td>
+                <td>${tmuser.first}</td>
                 <td><input type="checkbox" <c:if test="${tmuser.autorised}" >checked="checked"</c:if> disabled> </td>
                 <td>
                     <button type="button"   class="btn btn-primary" data-toggle="modal" data-target="#modalEdit" data-id="${tmuser.id}">
@@ -129,7 +111,7 @@
                 </td>
                 <td>
                     <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#deleteModal" data-id="${tmuser.id}"
-                            data-content="${tmuser.person.lastName} ${tmuser.person.firstName}">
+                            data-content="${tmuser.last} ${tmuser.first}">
                         <i class="far fa-trash-alt"></i>
                     </button>
 

@@ -18,8 +18,8 @@
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <maven.compiler.source>1.7</maven.compiler.source>
     <maven.compiler.target>1.7</maven.compiler.target>
-    <spring.version>5.1.9.RELEASE</spring.version>
-    <security.version>5.3.3.RELEASE</security.version>
+    <spring.version>5.3.5</spring.version>
+    <security.version>5.4.6</security.version>
     <hibernate.version>5.4.4.Final</hibernate.version>
     <jstl.version>1.2.1</jstl.version>
     <tld.version>1.1.2</tld.version>
@@ -32,6 +32,15 @@
   </properties>
 
   <dependencies>
+
+
+
+      <dependency>
+        <groupId>com.sun.mail</groupId>
+        <artifactId>javax.mail</artifactId>
+        <version>1.6.2</version>
+      </dependency>
+
 
 
     <dependency>
@@ -116,6 +125,21 @@
       <artifactId>spring-orm</artifactId>
       <version>${spring.version}</version>
     </dependency>
+
+    <!-- https://mvnrepository.com/artifact/org.springframework.integration/spring-integration-core -->
+    <dependency>
+      <groupId>org.springframework.integration</groupId>
+      <artifactId>spring-integration-core</artifactId>
+      <version>5.4.5</version>
+    </dependency>
+
+    <!-- https://mvnrepository.com/artifact/org.springframework.integration/spring-integration-mail -->
+    <dependency>
+      <groupId>org.springframework.integration</groupId>
+      <artifactId>spring-integration-mail</artifactId>
+      <version>5.4.5</version>
+    </dependency>
+
 
     <!-- https://mvnrepository.com/artifact/org.springframework.data/spring-data-jpa -->
     <dependency>
@@ -212,12 +236,13 @@
           <version>2.3.2</version>
       </dependency>
 
+    <!--
     <dependency>
       <groupId>com.github.pengrad</groupId>
       <artifactId>java-telegram-bot-api</artifactId>
-      <version>4.8.0</version>
+      <version>5.1.0</version>
     </dependency>
-
+-->
 
       <!-- Test -->
     <!-- Junit 5 -->
@@ -275,7 +300,7 @@
     <dependency>
       <groupId>org.telegram</groupId>
       <artifactId>telegrambots</artifactId>
-      <version>4.8.1</version>
+      <version>5.1.1</version>
     </dependency>
 
 

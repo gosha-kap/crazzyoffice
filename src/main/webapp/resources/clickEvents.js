@@ -2,7 +2,7 @@
 $(function () {
     $('table td button').click(function () {
         var str = $(this).attr('data-target');
-        alert(str+"111");
+
         if(str == "#deleteModal")        {
             $('#del_name').text($(this).attr('data-content'));
             $('#del_name').attr('data-id',$(this).attr('data-id'));
@@ -10,7 +10,7 @@ $(function () {
         }
         else if (str == "#modalEdit"){
             $('#edit_name').attr('data-id',$(this).attr('data-id'));
-            alert("2");
+
         }
 
 
@@ -23,14 +23,21 @@ $(function () {
 $(function () {
     $('#modalEdit').on('show.bs.modal', function () {
         var strId =  $('#edit_name').attr('data-id');
-        alert("4");
+        var checked;
+
         $.ajax({
             url: '/pologaya/'+strId,
             type: 'get',
             dataType: 'json',
             statusCode: {
                 200: function(response) {
-                    alert(response.toString());
+
+                    if(response.autorised) checked = "checked";
+                    $('#first').val(response.first);
+                    $('#last').val(response.last);
+                    $('#autorised').attr("checked", response.autorised);
+                    $('#employee_id').val(response.id);
+
                 }
             }
         });
@@ -53,5 +60,23 @@ $(function () {
         });
     })
 });
+
+$(function () {
+    $('#edit_butt').click(function () {
+        $.ajax({
+            url:'/pologaya',
+            method:"POST",
+            data:$('#edit_form').serialize(),
+
+            statusCode: {
+                200: function() {
+                    location.reload();
+                }
+            }
+        });
+    })
+});
+
+
 
 

@@ -9,32 +9,31 @@ public class TelegramUser {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    private Integer userId;
+    private Long userId;
 
-    private String chatId;
+    private Long  chatId;
 
     private Boolean autorised;
 
-    @OneToOne(cascade ={CascadeType.PERSIST, CascadeType.DETACH,CascadeType.MERGE,CascadeType.REFRESH})
-    @JoinColumn(name = "person_id", referencedColumnName = "id")
-    private Person person;
+    private String first;
+
+    private String last;
 
     public TelegramUser() {
     }
 
-    public TelegramUser(Integer userId, Person person ,Boolean auth) {
+
+
+    public TelegramUser(Long userId , Long chatId, Boolean auth, String first, String last) {
          this.userId = userId;
-         this.person =person;
          this.autorised = auth;
+         this.first = first;
+         this.last = last;
+         this.chatId = chatId;
+
     }
 
-    public Person getPerson() {
-        return person;
-    }
 
-    public void setPerson(Person person) {
-        this.person = person;
-    }
 
     public Integer getId() {
         return id;
@@ -44,11 +43,11 @@ public class TelegramUser {
         this.id = id;
     }
 
-    public Integer getUserId() {
+    public Long getUserId() {
         return userId;
     }
 
-    public void setUserId(Integer userId) {
+    public void setUserId(Long userId) {
         this.userId = userId;
     }
 
@@ -60,23 +59,27 @@ public class TelegramUser {
         this.autorised = autorised;
     }
 
-    public String getChatId() {
+    public Long getChatId() {
         return chatId;
     }
 
-    public void setChatId(String chatId) {
+    public void setChatId(Long chatId) {
         this.chatId = chatId;
     }
 
+    public String getFirst() {
+        return first;
+    }
 
-    @Override
-    public String toString() {
-        return "TelegramUser{" +
-                "id=" + id +
-                ", userId=" + userId +
-                ", chatId='" + chatId + '\'' +
-                ", autorised=" + autorised +
-                ", person=" + person +
-                '}';
+    public void setFirst(String first) {
+        this.first = first;
+    }
+
+    public String getLast() {
+        return last;
+    }
+
+    public void setLast(String last) {
+        this.last = last;
     }
 }

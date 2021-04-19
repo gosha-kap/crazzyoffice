@@ -4,9 +4,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.telegram.telegrambots.bots.DefaultBotOptions;
 import org.telegram.telegrambots.bots.TelegramWebhookBot;
 import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
-import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
+
 import org.telegram.telegrambots.meta.api.objects.Update;
-import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 import ru.crazzyoffice.bots.api.TelegramFacade;
 
 public class CrazyBot extends TelegramWebhookBot {
@@ -21,8 +20,13 @@ public class CrazyBot extends TelegramWebhookBot {
         super(options);
     }
 
+    public CrazyBot(){
+        super();
+    }
+
     @Override
     public BotApiMethod<?> onWebhookUpdateReceived(Update update) {
+        System.out.println("111111111111111");
           return telegramFacade.handleUpdate(update);
     }
 
