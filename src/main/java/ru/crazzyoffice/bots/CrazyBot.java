@@ -26,8 +26,7 @@ public class CrazyBot extends TelegramWebhookBot {
 
     @Override
     public BotApiMethod<?> onWebhookUpdateReceived(Update update) {
-        System.out.println("111111111111111");
-          return telegramFacade.handleUpdate(update);
+                 return telegramFacade.handleUpdate(update);
     }
 
     @Override

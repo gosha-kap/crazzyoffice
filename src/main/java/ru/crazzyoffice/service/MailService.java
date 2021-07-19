@@ -38,7 +38,6 @@ public class MailService {
             @Override
             public void handleMessage(Message<?> message) throws MessagingException {
                 String mess = message.getPayload().toString();
-                System.out.println("New email:" +mess);
 
                 List<TelegramUser> chats = telegramRepository.getAll();
                 if(chats.size()!=0){

@@ -17,16 +17,13 @@ public class BotConfig {
     @Autowired
     private Environment environment;
 
-
     @Bean
     public ArduinoSendRequest  arduinoSendRequest(){
-        return new ArduinoSendRequest(environment.getProperty("arduino.request.pologaya"),
-                                        environment.getProperty("arduino.request.garage"));
+        return new ArduinoSendRequest();
     }
 
    @Bean
     public CrazyBot CrazyBot() {
-
 
        CrazyBot crazyBot = new CrazyBot();
        crazyBot.setBotUserName(environment.getProperty("telegrambot.userName"));

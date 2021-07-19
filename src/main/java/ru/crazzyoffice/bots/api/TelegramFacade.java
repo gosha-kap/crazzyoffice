@@ -14,44 +14,27 @@ import ru.crazzyoffice.service.MainMenuService;
 
 import java.io.IOException;
 
-
-/**
- * @author Sergei Viacheslaev
- */
 @Component
 public class TelegramFacade {
 
     @Autowired
     private TelegramRepository repository;
-
     @Autowired
     private ArduinoSendRequest arduinoSendRequest;
-
     @Autowired
     private MainMenuService mainMenuService;
-
-
-
 
     private static final Logger logger =
             LoggerFactory.getLogger(TelegramFacade.class);
 
     public BotApiMethod<?> handleUpdate(Update update) {
 
-
         Message message = update.getMessage();
-
         String inputMsg = message.getText();
-
         Long userId = message.getFrom().getId();
-
         Long  chatId = message.getChat().getId();
-
         String userName = message.getFrom().getFirstName();
-
         String lastName = message.getFrom().getLastName();
-
-
 
         String outMsg;
 
@@ -60,18 +43,17 @@ public class TelegramFacade {
 
         if (telegramUser.getAutorised()) {
 
-            String personName = telegramUser.getFirst()+"_"+telegramUser.getLast();
             switch (inputMsg) {
                 case "Шлагбаум Пологая":
-                    logger.debug("Open POLOGAYA by {}",personName );
+                    logger.debug("Open  by {}",telegramUser.getFirst()+"_"+telegramUser.getLast() );
                     try {
-                        arduinoSendRequest.doGet(POSITION.Pologaya);
+                        arduinoSendRequest.doGet();
                     } catch (IOException e) {
-                        logger.error("Error  POLOGAYA :  {}", e.getMessage());
+                        logger.error("Error   :  {}", e.getMessage());
                         outMsg = "Ошибка: IOException";
                         break;
                     } catch (InterruptedException e) {
-                        logger.error("Error  POLOGAYA :  {}", e.getMessage());
+                        logger.error("Error   :  {}", e.getMessage());
                         outMsg = "InterruptedException";
                         break;
                     }
@@ -90,7 +72,7 @@ public class TelegramFacade {
                     outMsg = "Запрос отправлен";
                     break;
                 default:
-                    outMsg = "Вы не авторизованы";
+                    outMsg = "Доступ запрещен";
             }
             return mainMenuService.getAuthMenuMessage(chatId.toString(), outMsg);
         }

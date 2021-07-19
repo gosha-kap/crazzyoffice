@@ -7,13 +7,10 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
-import ru.crazzyoffice.entity.EditProfile;
 import ru.crazzyoffice.entity.TelegramUser;
-import ru.crazzyoffice.error.IllegalRequestDataException;
-import ru.crazzyoffice.error.NotFoundException;
+import  ru.crazzyoffice.error.NotFoundException;
 import ru.crazzyoffice.repository.TelegramRepository;
 
-import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 

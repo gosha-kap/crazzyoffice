@@ -19,8 +19,7 @@ public class TelegramController {
 
     @PostMapping
     public BotApiMethod<?> onUpdateReceived(@RequestBody Update update){
-        System.out.println("0000000000000000");
-           return crazyBot.onWebhookUpdateReceived(update);
+            return crazyBot.onWebhookUpdateReceived(update);
     }
     @GetMapping
     public void redirect(HttpServletResponse response) throws Exception

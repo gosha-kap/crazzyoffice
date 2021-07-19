@@ -47,7 +47,6 @@ public class MailListenerzz {
         System.out.println("111111");
 
         Properties props = new Properties();
-       // props.setProperty("mail.debug", "true");
         props.setProperty("mail.imap.ssl.enable", "false");
         props.setProperty("mail.imap.starttls.enable","false");
 
