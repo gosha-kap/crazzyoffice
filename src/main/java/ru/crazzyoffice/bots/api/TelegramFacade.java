@@ -1,6 +1,5 @@
 package ru.crazzyoffice.bots.api;
 
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,11 +7,12 @@ import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
 import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
+import ru.crazzyoffice.bots.commands.InputMessage;
+import ru.crazzyoffice.bots.commands.ResponseMessage;
+import ru.crazzyoffice.bots.commands.SendRequest;
 import ru.crazzyoffice.entity.TelegramUser;
 import ru.crazzyoffice.repository.TelegramRepository;
 import ru.crazzyoffice.service.MainMenuService;
-
-import java.io.IOException;
 
 @Component
 public class TelegramFacade {
@@ -20,7 +20,7 @@ public class TelegramFacade {
     @Autowired
     private TelegramRepository repository;
     @Autowired
-    private ArduinoSendRequest arduinoSendRequest;
+    private SendRequest sendRequest;
     @Autowired
     private MainMenuService mainMenuService;
 
@@ -28,55 +28,52 @@ public class TelegramFacade {
             LoggerFactory.getLogger(TelegramFacade.class);
 
     public BotApiMethod<?> handleUpdate(Update update) {
-
+        /*
+        Get Meta data from input message
+         */
         Message message = update.getMessage();
-        String inputMsg = message.getText();
         Long userId = message.getFrom().getId();
         Long  chatId = message.getChat().getId();
         String userName = message.getFrom().getFirstName();
         String lastName = message.getFrom().getLastName();
-
-        String outMsg;
-
+        /*
+        Find User by Id or create new
+         */
         TelegramUser telegramUser = repository.getByUserId(userId).orElse(
                 new TelegramUser(userId, chatId, false,userName,lastName));
-
-        if (telegramUser.getAutorised()) {
-
-            switch (inputMsg) {
-                case "Шлагбаум Пологая":
-                    logger.debug("Open  by {}",telegramUser.getFirst()+"_"+telegramUser.getLast() );
-                    try {
-                        arduinoSendRequest.doGet();
-                    } catch (IOException e) {
-                        logger.error("Error   :  {}", e.getMessage());
-                        outMsg = "Ошибка: IOException";
-                        break;
-                    } catch (InterruptedException e) {
-                        logger.error("Error   :  {}", e.getMessage());
-                        outMsg = "InterruptedException";
-                        break;
-                    }
-                    outMsg = "Пожалуйста, проезжайте";
+        /*
+        Identify input message else  return UNKNOWN
+        Set default response message
+        Check if user is autoriize
+         */
+        InputMessage inputMessage = InputMessage.getMessage(message.getText());
+        ResponseMessage responseMessage = ResponseMessage.UNRECOGNIZE;
+        Boolean isAutorize = telegramUser.getAutorised();
+        /*
+         Process commands for autorized users or not
+         */
+        if (isAutorize) {
+            logger.debug("Send request by {}", "id=" + userId + " ,name=" + telegramUser.getFirst() + " " + telegramUser.getLast());
+            switch (inputMessage) {
+                case OPEN:
+                    responseMessage = sendRequest.request();
                     break;
-
-                default:
-                    outMsg = "Unknown command";
+                case UNKNOWN:
+                    break;
             }
-            return mainMenuService.getMainMenuMessage(chatId.toString(), outMsg);
+
         } else {
             logger.debug("Unauthorised request by , value {}", "id=" + userId + " ,name=" + telegramUser.getFirst() + " " + telegramUser.getLast() );
-            switch (inputMsg) {
-                case "Авторизоваться":
+            switch (inputMessage) {
+                case AUTORIZE:
                     repository.save(telegramUser);
-                    outMsg = "Запрос отправлен";
+                    responseMessage = ResponseMessage.REQUEST_SENDED;
                     break;
-                default:
-                    outMsg = "Доступ запрещен";
+                case UNKNOWN:
+                    responseMessage = ResponseMessage.ACCESS_FORBITTEN;
             }
-            return mainMenuService.getAuthMenuMessage(chatId.toString(), outMsg);
         }
-
+        return mainMenuService.getMenuMessage(chatId.toString(), responseMessage, isAutorize);
     }
 }
 

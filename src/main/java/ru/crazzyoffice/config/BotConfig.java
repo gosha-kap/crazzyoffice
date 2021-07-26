@@ -7,7 +7,8 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.env.Environment;
 import ru.crazzyoffice.bots.CrazyBot;
-import ru.crazzyoffice.bots.api.ArduinoSendRequest;
+import ru.crazzyoffice.bots.commands.ArduinoSendRequest;
+import ru.crazzyoffice.bots.commands.SendRequest;
 
 @Configuration
 @ComponentScan(basePackages = "ru.crazzyoffice.bots")
@@ -18,8 +19,8 @@ public class BotConfig {
     private Environment environment;
 
     @Bean
-    public ArduinoSendRequest  arduinoSendRequest(){
-        return new ArduinoSendRequest();
+    public SendRequest arduinoSendRequest() {
+        return new ArduinoSendRequest(environment.getProperty("request"));
     }
 
    @Bean

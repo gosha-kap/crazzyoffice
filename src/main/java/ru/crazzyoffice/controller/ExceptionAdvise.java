@@ -1,16 +1,12 @@
 package ru.crazzyoffice.controller;
 
 
-
-import org.springframework.core.Ordered;
 import org.springframework.core.annotation.AnnotationUtils;
-import org.springframework.core.annotation.Order;
-import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.ControllerAdvice;
+import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.NoHandlerFoundException;
@@ -21,7 +17,6 @@ import ru.crazzyoffice.error.NotFoundException;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.ConstraintViolationException;
-
 
 import static ru.crazzyoffice.error.ErrorType.*;
 
@@ -79,17 +74,15 @@ public class ExceptionAdvise {
     private static ModelAndView logAndGetErrorInfo(HttpServletRequest req, Exception e, boolean logException, ErrorType errorType) {
         Throwable rootCause = getRootCause(e);
 
-        //log.error(errorType + " at request " + req.getRequestURL(), rootCause);
-
         System.out.println("URL - "+req.getRequestURL());
-        System.out.println("ErrorTYpe -"+errorType);
+        System.out.println("ErrorType -" + errorType);
         System.out.println("Case - " + rootCause);
         System.out.println("Exception - " + e.toString());
 
         ModelAndView modelAndView = new ModelAndView("error");
         ErrorResponse errorResponse = new  ErrorResponse(req.getRequestURL(), errorType, rootCause.toString());
 
-        modelAndView.addObject("not_found",errorType.equals(PAGE_NOT_FOUND) ? true : false);
+        modelAndView.addObject("not_found", errorType.equals(PAGE_NOT_FOUND));
         return modelAndView;
     }
 

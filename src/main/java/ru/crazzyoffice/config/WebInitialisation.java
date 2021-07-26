@@ -15,12 +15,12 @@ public class WebInitialisation extends AbstractAnnotationConfigDispatcherServlet
 
     @Override
     protected Class<?>[] getRootConfigClasses() {
-       return  new Class[] {SecurityConfig.class};
+        return new Class[]{SecurityConfig.class, WebConfig.class, JPAConfig.class, BotConfig.class};
     }
 
     @Override
     protected Class<?>[] getServletConfigClasses() {
-        return new Class[] {WebConfig.class};
+        return null;
     }
 
     @Override
