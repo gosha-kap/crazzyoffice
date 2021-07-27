@@ -1,5 +1,7 @@
 package ru.crazzyoffice.error;
-
+/*
+Just an example of error object what can be sended  to error page
+ */
 
 
 public class ErrorResponse {

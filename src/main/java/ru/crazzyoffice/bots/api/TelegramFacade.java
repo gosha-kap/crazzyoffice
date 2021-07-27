@@ -42,7 +42,7 @@ public class TelegramFacade {
         TelegramUser telegramUser = repository.getByUserId(userId).orElse(
                 new TelegramUser(userId, chatId, false,userName,lastName));
         /*
-        Identify input message else  return UNKNOWN
+        Identify input type message else  return UNKNOWN
         Set default response message
         Check if user is autoriize
          */
@@ -51,6 +51,7 @@ public class TelegramFacade {
         Boolean isAutorize = telegramUser.getAutorised();
         /*
          Process commands for autorized users or not
+         Return menu with result
          */
         if (isAutorize) {
             logger.debug("Send request by {}", "id=" + userId + " ,name=" + telegramUser.getFirst() + " " + telegramUser.getLast());
