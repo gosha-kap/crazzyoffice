@@ -15,7 +15,7 @@ ____
 ## Configuration
 App is build on ***Spring MVC*** framework which contain simple ***Spring Security*** and ***Spring Data Jpa*** realisation. Your can change credentials in Security config file. By default username and 
 password is *admin*.
-Jpa config is loaded paramets from *persistence-mysql.properties* file. I used localy installed postgresql database.To create table use *init.sql* script.
+Jpa config is loaded paramets from *persistence-mysql.properties* file. I used localy installed postgresql database.To create table use *init.sql* script. All actions logs in file that located in $HOME\Logs directory.
 
 To create telegram bot use the main *BotFather* bot. When your get you botToken, your can set it in *telegram.properties* file. 
 I didn't have ssl certificate to set WebHook so I used [ngrok](https://ngrok.com/) service what redirect query from bot to app. To handle request I used ready [TelegramBots](https://github.com/rubenlagus/TelegramBots)
