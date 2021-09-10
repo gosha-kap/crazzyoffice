@@ -1,7 +1,7 @@
 # crazzyoffice
 
 ## Description
-This project  how to process some commands via telegram bot. In my case  I control parking gateway relay. Easy to give access and maintain control users, view history etc. 
+This project  how to process some commands via telegram bot. In my case  I control electrical relay on parking gateway . Easy to give access and maintain control users, view history etc. 
 Otherwise it needs to open body of control panel , change control pins to enable program mode, add new wireless control button for every new  employee or if employee is fired 
 or lost device, etc. In second, these buttons needs to buy and so on.
 Electrical relay is represented by arduino ethernet board. I run web server on it and switch relay when get request to it from my app. The scheme of work was designed from the parts
